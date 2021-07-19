@@ -1,11 +1,19 @@
 ## Reach Modified Bluffing Game
 
-Our bluffing game is a simple dice game that often use to bet/drinking bear in the party. It can be two players game or multiple players game(we will develop two players game first). Each player has 5 dice, when game begins, player rolls the dice, and bluffs there are the number of #DiceNumberA #DiceValueA, then another player will believe or not, if believe, he need to bluff (at least #DiceNumberA + 1 #DiceValueA) or (#DiceNumberA #DiceNumberB which #DiceNumberB > #DiceNumberA), then the first player will deceide to believe or not. if not believe, players will show their dice and see the result to determine whether the player win or lose.
+Our bluffing game is a simple dice game that often use to bet/drinking beer in the party. It can be two players game or multiple players game(we will develop two players game first). Each player has 5 dice, when game begins, player rolls the dice simutaneously, keep them hidden from other players, and make a bid consisting of #AmountA #FaceA. The amount represents the player's guess as to how many of each face have been rolled by all of the players at the table, including themselves. Once he/she makes his/her guess, the other player(s) have several options: 
+
+1. bid of a larger amount of #FaceA 
+2. bid the same amount of #AmountA, but a higher face value. 
+3. both 1 and 2
+4. challenge the current bid
+
+When a bid is challenged, every player reveals their dice and check if the current bid is matched or not. If the bid is neither matched nor exceeded, the challenger wins(caught this bidder bluffing). Otherwise, the bidder wins. 
+
 
 ## Rule
 
 ### 1
-If #valueOne is not called, then it can be represented as any number
+If #valueOne is not called, then it can be represented as any number (you mean valueOne is wild???)
 #### example one
 handA = {1, 1, 2, 3, 4}
 handB = {1, 2, 3, 4, 4}
@@ -43,28 +51,28 @@ if one players get all same value, then it can be considered as 7 that value's d
 handA = {2, 2, 2, 2, 2}
 handB = {1, 2, 3, 4, 4}
 
-there are 7 + 2个 1 in the game
+there are 7 + 2个 2 in the game
 
 ## Step (two players)
     -A deploys game, set wager
 
-    -B as attacher, join game, accept accep wager
+    -B as attacher, join game, accept wager
 
     -AB roll the dice 
 
-    -A bluff
+    -A bid
 
-    -B bluff
+    -B bid
 
-    -A bluff
+    -A bid
 
     ...
 
-    -A bluff
+    -A bid
 
-    -B open
+    -B challenge
 
-    - check result and transfer money
+    -check result and transfer money
 
 ## How to run 
 
@@ -72,5 +80,6 @@ there are 7 + 2个 1 in the game
 
 ## ISSUE
 
-## what can be improved
+## what can be improved 
+
 
