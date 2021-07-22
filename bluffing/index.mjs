@@ -86,35 +86,42 @@ import { ask, yesno, done } from '@reach-sh/stdlib/ask.mjs';
     'Scissors': 2, 'S': 2, 's': 2,
     'guess':3, 'G':3, 'g':3
   };
-  interact.guessNum = async () => {
-    const hand = await ask(`What guess will you make?`, (x) => {
-    const hand = HANDS[x];
-      if ( hand == null ) {
-        throw Error(`Not a valid hand ${hand}`);
-      }
-      return hand;
-    });
-    console.log(`You guessed ${HAND[hand]}`);
 
-    return hand;
-  };
 
-  interact.guessNumOrOpen = async () => {
-    const hand = await ask(`What guess will you make / type 0 to open?`, (x) => {
-    const hand = HANDS[x];
-      if ( hand == null ) {
-        throw Error(`Not a valid hand ${hand}`);
-      }
-      return hand;
-    });
-    console.log(`You guessed ${HAND[hand]}`);
-    console.log('num is ', hand)
-    return hand;
-  };
-
-  interact.logshit = async (handa, handb) => {
-    console.log('handa, handb', handa, handb)
+  interact.getFace = async () => {
+    const face1 = Math.ceil(Math.random() * 6);
+    console.log(`You got ${face1}`);
+    return face1;
   }
+
+  interact.guessNum = async () => {
+    const guess = await ask(`What guess will you make?`, (x) => {
+    const guess = parseInt(x, 10);
+      if ( guess == null ) {
+        throw Error(`Not a valid guess ${guess}`);
+      }
+      return guess;
+    });
+    console.log(`You guessed ${guess}`);
+    return guess;
+  };
+
+  interact.guessNumOrChallenge = async () => {
+    const hand = await ask(`What guess will you make or challenge?`, (x) => {
+    const hand = parseInt(x, 10);
+      if ( hand == null ) {
+        throw Error(`Not a valid hand ${hand}`);
+      }
+      return hand;
+    });
+    console.log(`You guessed ${hand}`);
+    return hand;
+  };
+
+  interact.ifWinner = async(faceA, faceB, guess) => {
+    return (faceA+faceB < guess)? 0 : 1;
+  }
+
 
   const OUTCOME = ['Bob wins', 'Draw', 'Alice wins'];
   interact.seeOutcome = async (outcome) => {
