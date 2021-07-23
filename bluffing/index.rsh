@@ -3,18 +3,28 @@
 const [ isHand, ROCK, PAPER, SCISSORS, GUESS ] = makeEnum(4);
 const [ isOutcome, B_WINS, DRAW, A_WINS ] = makeEnum(3);
 
-const winner = (faceA, faceB, guess) =>
+const winnerA = (faceA, faceB, guess) =>
+  (faceA+faceB < guess) ? 2 : 0
+
+const getWinnerA = (ifBluffing) =>
+  (ifBluffing)? 2 : 0
+
+const getWinnerB = (ifBluffing) =>
+  (ifBluffing)? 0 : 2
+
+const winnerB = (faceA, faceB, guess) =>
   (faceA+faceB < guess) ? 0 : 2
-
-
 
 const Player =
       { ...hasRandom,
         ...hasConsoleLogger,
-        ifWinner: Fun([UInt, UInt, UInt], UInt),
+        generateFaces: Fun([], Array(UInt, 5)),
+        ifChallenge: Fun([UInt, UInt], UInt),
+        ifWinner: Fun([Array(UInt, 5), Array(UInt, 5), UInt, UInt, UInt], Bool),
         getFace: Fun([], UInt),
-        guessNumOrChallenge: Fun([], UInt),
-        guessNum: Fun([], UInt),
+        keepBidding: Fun([UInt, UInt], Array(UInt, 2)),
+        guessAmount: Fun([], UInt),
+        guessFace: Fun([], UInt),
         seeOutcome: Fun([UInt], Null),
         informTimeout: Fun([], Null),
       };
@@ -46,69 +56,97 @@ export const main =
         interact.acceptWager(wager); });
       B.pay(wager)
         .timeout(DEADLINE, () => closeTo(A, informTimeout));
-      commit()
+      commit();
 
       A.only(() => {
-        const faceA = declassify(interact.getFace());
+        const diceA = declassify(interact.generateFaces());
       })
-      A.publish(faceA)
-      commit()
+      A.publish(diceA)
+      commit();
+
       B.only(() => {
-        const faceB = declassify(interact.getFace());
+        const diceB = declassify(interact.generateFaces());
       })
-      B.publish(faceB)
+      B.publish(diceB)
 
 
-      var [outcome, turn, first_call, tmpA, tmpB] = [DRAW, 0, 1, 99, 99];
+      var [outcome, turn, first_call, aA, fA, aB, fB] = [DRAW, 0, 1, 99, 99, 99, 99];
       invariant(balance() == 2 * wager && isOutcome(outcome) );
       while ( outcome == 1 ) {
         if (first_call == 1){
           commit();
           A.only(() => {
-            const handA = declassify(interact.guessNum())});
-          A.publish(handA)
+            const amountA = declassify(interact.guessAmount());
+            const faceA = declassify(interact.guessFace());
+            });
+          A.publish(amountA, faceA)
             .timeout(DEADLINE, () => closeTo(B, informTimeout));
-          [first_call, tmpA] = [0, handA];
+          [first_call, aA, fA] = [0, amountA, faceA];
           continue
-        }else{
+        }
+        else{         
           if (turn == 1){
             commit();
             A.only(() => {
-              const handA = declassify(interact.guessNumOrChallenge())});
-            A.publish(handA)
-              .timeout(DEADLINE, () => closeTo(B, informTimeout));
-            
-            if (handA == 0){
-              [turn, outcome] = [0, winner(faceA, faceB, tmpB)];
-              continue
-            }else{
-              [turn, tmpA] = [0, handA];   
-              continue
-            }
-            // commit();
-          }else{
-            commit();
+              const AChallengeB = declassify(interact.ifChallenge(aB, fB));
+            });
+            A.publish(AChallengeB);
+            if (AChallengeB == 1){
+              commit();
+              A.only(()=> {
+                const tester = declassify(interact.ifWinner(diceA, diceB, aB, fB, 0));
+              });
+              A.publish(tester)
+                .timeout(DEADLINE, () => closeTo(B, informTimeout));
+              [turn, outcome] = [1, getWinnerA(tester)];
+              continue;
+          }
+          else{
+                commit();
+                A.only(() => {
+                  const [amountA, faceA] = declassify(interact.keepBidding(aB, fB));
+                })
+                A.publish(amountA, faceA);
+                [turn, aA, fA] = [0, amountA, faceA];
+                continue;
+                }
+          }
+          else{
+            commit()
             B.only(() => {
-              const handB = declassify(interact.guessNumOrChallenge()); });
-            B.publish(handB)
-              .timeout(DEADLINE, () => closeTo(A, informTimeout));
-            if (handB == 0){
-              [turn, outcome] = [1, winner(faceA, faceB, tmpA)];
-              continue
-            }else{
-              [turn, tmpB] = [1, handB];
-              continue
+              const BChallengeA = declassify(interact.ifChallenge(aA, fA));
+            });
+            B.publish(BChallengeA);
+            if (BChallengeA == 1){
+              commit();
+              B.only(()=> {
+                const tester = declassify(interact.ifWinner(diceA, diceB, aA, fA, 1));
+              });
+              B.publish(tester)
+                .timeout(DEADLINE, () => closeTo(A, informTimeout));
+              [turn, outcome] = [1, getWinnerB(tester)];
+              continue;
             }
+              else{
+                commit();
+                B.only(() => {
+                  const [amountB, faceB] = declassify(interact.keepBidding(aA, fA));
+                });
+                B.publish(amountB, faceB)
+                  .timeout(DEADLINE, () => closeTo(A, informTimeout));
+                [turn, aB, fB] = [1, amountB, faceB];
+                continue
+              }
+
             // commit();
             }
-          
         }
       }
-
       assert(outcome == A_WINS || outcome == B_WINS);
       transfer(2 * wager).to(outcome == A_WINS ? A : B);
       commit();
 
       each([A, B], () => {
         interact.seeOutcome(outcome); });
-      exit(); });
+      exit(); 
+  });

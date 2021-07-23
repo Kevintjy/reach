@@ -87,6 +87,17 @@ import { ask, yesno, done } from '@reach-sh/stdlib/ask.mjs';
     'guess':3, 'G':3, 'g':3
   };
 
+  const FACES = [-1, -1, -1, -1, -1];
+  interact.generateFaces = async() => {
+    const num1 = Math.ceil(Math.random() * 6);
+    const num2 = Math.ceil(Math.random() * 6);
+    const num3 = Math.ceil(Math.random() * 6);
+    const num4 = Math.ceil(Math.random() * 6);
+    const num5 = Math.ceil(Math.random() * 6);
+    const res = [num1, num2, num3, num4, num5];
+    console.log(`the generated dices are ${res}`)
+    return res;
+  }
 
   interact.getFace = async () => {
     const face1 = Math.ceil(Math.random() * 6);
@@ -94,33 +105,82 @@ import { ask, yesno, done } from '@reach-sh/stdlib/ask.mjs';
     return face1;
   }
 
-  interact.guessNum = async () => {
-    const guess = await ask(`What guess will you make?`, (x) => {
+  interact.guessAmount = async () => {
+    const guess = await ask(`What is the amount of the face`, (x) => {
     const guess = parseInt(x, 10);
       if ( guess == null ) {
         throw Error(`Not a valid guess ${guess}`);
       }
       return guess;
     });
-    console.log(`You guessed ${guess}`);
+    console.log(`Amount: ${guess}`);
     return guess;
   };
 
-  interact.guessNumOrChallenge = async () => {
-    const hand = await ask(`What guess will you make or challenge?`, (x) => {
-    const hand = parseInt(x, 10);
-      if ( hand == null ) {
-        throw Error(`Not a valid hand ${hand}`);
+  interact.guessFace = async () => {
+    const guess = await ask(`What is the value of the face`, (x) => {
+    const guess = parseInt(x, 10);
+      if ( guess == null ) {
+        throw Error(`Not a valid guess ${guess}`);
       }
-      return hand;
+      return guess;
     });
-    console.log(`You guessed ${hand}`);
-    return hand;
+    console.log(`Face: ${guess}`);
+    return guess;
   };
 
-  interact.ifWinner = async(faceA, faceB, guess) => {
-    return (faceA+faceB < guess)? 0 : 1;
+  interact.ifChallenge = async(currAmount, currFace) => {
+    const challenged = await ask(`Amount: ${currAmount}, Face: ${currFace}.
+                           Do you want to challenge this guess?`, 
+                           yesno);
+    if (challenged) {
+      return 1;
+    }
+    else{
+      return 0;
+    }
   }
+
+  interact.keepBidding = async (currAmount, currFace) => {
+    const amt = await ask(`What is the amount?`, (x) => {
+      const amt = parseInt(x, 10);
+      if (amt < currAmount){
+        throw Error("please bid more amount which is greater than current amount")
+      }
+      return amt;
+    });
+    const face = await ask(`What is the Face?`, (y) => {
+      const face = parseInt(y, 10);
+      if (amt == currAmount && face <= currFace){
+        throw Error('you should bid more')
+      }
+      return face;
+    });
+
+    console.log(`You guessed amt:${amt}, face:${face}`);
+    return [amt, face];
+  };
+
+  interact.ifWinner = async(diceA, diceB, a, f, person) => {
+      var count = 0;
+      for (let i=0; i<6; i++){
+        if (diceA[i] == 1 || diceA[i] == f){
+          count += 1;
+        }
+        console.log(diceA[i], count)
+        if (diceB[i] == 1 || diceB[i] == f){
+          count += 1;
+        }
+        console.log(diceB[i], count)
+      }
+      console.log(`diceA ${diceA}`)
+      console.log(`diceB ${diceB}`)
+      console.log(`the number of ${f} is ${count}`)
+      console.log(a>count)
+      return a>count;
+        
+  }
+  
 
 
   const OUTCOME = ['Bob wins', 'Draw', 'Alice wins'];
