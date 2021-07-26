@@ -21,10 +21,7 @@ const Player =
         generateFaces: Fun([], Array(UInt, 5)),
         ifChallenge: Fun([UInt, UInt], UInt),
         ifWinner: Fun([Array(UInt, 5), Array(UInt, 5), UInt, UInt, UInt], Bool),
-        getFace: Fun([], UInt),
         keepBidding: Fun([UInt, UInt], Array(UInt, 2)),
-        guessAmount: Fun([], UInt),
-        guessFace: Fun([], UInt),
         seeOutcome: Fun([UInt], Null),
         informTimeout: Fun([], Null),
       };
@@ -33,8 +30,8 @@ const Alice =
         wager: UInt };
 const Bob =
       { ...Player,
-        acceptWager: Fun([UInt], Null),
-        logshit: Fun([UInt, UInt], Null) };
+        acceptWager: Fun([UInt], Null)
+        };
 
 const DEADLINE = 300;
 export const main =
@@ -76,8 +73,7 @@ export const main =
         if (first_call == 1){
           commit();
           A.only(() => {
-            const amountA = declassify(interact.guessAmount());
-            const faceA = declassify(interact.guessFace());
+              const [amountA, faceA] = declassify(interact.keepBidding(0, 0));
             });
           A.publish(amountA, faceA)
             .timeout(DEADLINE, () => closeTo(B, informTimeout));
@@ -100,16 +96,16 @@ export const main =
                 .timeout(DEADLINE, () => closeTo(B, informTimeout));
               [turn, outcome] = [1, getWinnerA(tester)];
               continue;
-          }
-          else{
-                commit();
-                A.only(() => {
-                  const [amountA, faceA] = declassify(interact.keepBidding(aB, fB));
-                })
-                A.publish(amountA, faceA);
-                [turn, aA, fA] = [0, amountA, faceA];
-                continue;
-                }
+            }
+            else{
+              commit();
+              A.only(() => {
+                const [amountA, faceA] = declassify(interact.keepBidding(aB, fB));
+              })
+              A.publish(amountA, faceA);
+              [turn, aA, fA] = [0, amountA, faceA];
+              continue;
+              }
           }
           else{
             commit()

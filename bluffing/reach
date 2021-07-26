@@ -101,7 +101,7 @@ HERE="$(dirname "$REACH")"
 
 # XXX Get from VERSION in Haskell version
 REACH_DEFAULT_VERSION=0.1
-# REACH_FULL_VERSION=0.1.2
+# REACH_FULL_VERSION=0.1.3
 
 # XXX RV_TAG* is no longer used b/c
 #   the reach version is no longer embedded into package.json
@@ -164,9 +164,9 @@ fatal_unrecognized_connector_mode() {
 
 ensure_connector_mode () {
   # Makes sure to set REACH_CONNECTOR_MODE to one of:
-  # * ETH-test-dockerized-geth
+  # * ETH-devnet
   # * ETH-live
-  # * ALGO-test-dockerized-algod
+  # * ALGO-devnet
   # $WHAT-$WHERE-$HOW-$HOW_WHERE
   # (or error)
   # This can be derived from REACH_TESTNET and possibly REACH_ETH_MODE
@@ -175,28 +175,22 @@ ensure_connector_mode () {
   REACH_CONNECTOR_MODE=${REACH_CONNECTOR_MODE:-ETH}
   case "$REACH_CONNECTOR_MODE" in
     "ETH")
-      REACH_CONNECTOR_MODE="ETH-test-dockerized-geth"
+      REACH_CONNECTOR_MODE="ETH-devnet"
       ;;
     "ETH-live")
       REACH_CONNECTOR_MODE="ETH-live"
       ;;
-    "ETH-test")
-      REACH_CONNECTOR_MODE="ETH-test-dockerized-geth"
-      ;;
-    "ETH-test-dockerized")
-      REACH_CONNECTOR_MODE="ETH-test-dockerized-geth"
+    "ETH-devnet")
+      REACH_CONNECTOR_MODE="ETH-devnet"
       ;;
     "ALGO")
-      REACH_CONNECTOR_MODE="ALGO-test-dockerized-algod"
+      REACH_CONNECTOR_MODE="ALGO-devnet"
       ;;
     "ALGO-live")
       REACH_CONNECTOR_MODE="ALGO-live"
       ;;
-    "ALGO-test")
-      REACH_CONNECTOR_MODE="ALGO-test-dockerized-algod"
-      ;;
-    "ALGO-test-dockerized")
-      REACH_CONNECTOR_MODE="ALGO-test-dockerized-algod"
+    "ALGO-devnet")
+      REACH_CONNECTOR_MODE="ALGO-devnet"
       ;;
     "CFX")
       REACH_CONNECTOR_MODE="CFX-devnet"
@@ -213,11 +207,11 @@ ensure_connector_mode () {
   case "$REACH_CONNECTOR_MODE" in
     "ETH-live")
       ;;
-    "ETH-test-dockerized-geth")
+    "ETH-devnet")
       ;;
     "ALGO-live")
       ;;
-    "ALGO-test-dockerized-algod")
+    "ALGO-devnet")
       ;;
     "CFX-devnet")
       ;;
@@ -525,21 +519,21 @@ x-app-base: &app-base
 services:
   devnet-cfx:
     image: reachsh/devnet-cfx:${REACH_VERSION}
-  ethereum-devnet:
-    image: reachsh/ethereum-devnet:${REACH_VERSION}
-  algorand-devnet:
-    image: reachsh/algorand-devnet:${REACH_VERSION}
+  devnet-eth:
+    image: reachsh/devnet-eth:${REACH_VERSION}
+  devnet-algo:
+    image: reachsh/devnet-algo:${REACH_VERSION}
     depends_on:
-      - algorand-postgres-db
+      - devnet-algo-pg
     environment:
       - REACH_ALGO_DEBUG
-      - POSTGRES_HOST=algorand-postgres-db
+      - POSTGRES_HOST=devnet-algo-pg
       - POSTGRES_USER=algogrand
       - POSTGRES_PASSWORD=indexer
       - POSTGRES_DB=pgdb
     ports:
       - 9392
-  algorand-postgres-db:
+  devnet-algo-pg:
     image: postgres:11-alpine
     environment:
       - POSTGRES_USER=algogrand
@@ -553,14 +547,14 @@ services:
       - REACH_ISOLATED_NETWORK
       - ETH_NODE_URI
       - ETH_NODE_NETWORK
-  ${SERVICE}-ETH-test-dockerized-geth: &default-app
+  ${SERVICE}-ETH-devnet: &default-app
     <<: *app-base
     depends_on:
-      - ethereum-devnet
+      - devnet-eth
     environment:
       - REACH_DEBUG
-      - REACH_CONNECTOR_MODE=ETH-test-dockerized-geth
-      - ETH_NODE_URI=http://ethereum-devnet:8545
+      - REACH_CONNECTOR_MODE=ETH-devnet
+      - ETH_NODE_URI=http://devnet-eth:8545
   ${SERVICE}-ALGO-live:
     <<: *app-base
     environment:
@@ -574,16 +568,16 @@ services:
       - ALGO_INDEXER_SERVER
       - ALGO_INDEXER_PORT
       - ALGO_FAUCET_PASSPHRASE
-  ${SERVICE}-ALGO-test-dockerized-algod:
+  ${SERVICE}-ALGO-devnet:
     <<: *app-base
     depends_on:
-      - algorand-devnet
+      - devnet-algo
     environment:
       - REACH_DEBUG
-      - REACH_CONNECTOR_MODE=ALGO-test-dockerized-algod
-      - ALGO_SERVER=http://algorand-devnet
+      - REACH_CONNECTOR_MODE=ALGO-devnet
+      - ALGO_SERVER=http://devnet-algo
       - ALGO_PORT=4180
-      - ALGO_INDEXER_SERVER=http://algorand-devnet
+      - ALGO_INDEXER_SERVER=http://devnet-algo
       - ALGO_INDEXER_PORT=8980
   ${SERVICE}-CFX-devnet:
     <<: *app-base
@@ -907,13 +901,13 @@ react_compose () {
       ALGO*)
         DEPENDS_ON='
     depends_on:
-      - algorand-devnet
+      - devnet-algo
 '
         ;;
       ETH*)
         DEPENDS_ON='
     depends_on:
-      - ethereum-devnet
+      - devnet-eth
 '
         ;;
     esac
@@ -937,21 +931,21 @@ services:
       - REACT_APP_REACH_CONNECTOR_MODE=${REACH_CONNECTOR_MODE}
       - REACT_APP_REACH_ISOLATED_NETWORK=${REACH_ISOLATED_NETWORK}
 $DEPENDS_ON
-  ethereum-devnet:
-    image: reachsh/ethereum-devnet:${REACH_VERSION}
+  devnet-eth:
+    image: reachsh/devnet-eth:${REACH_VERSION}
     ports:
       - '8545:8545'
   devnet-cfx:
     image: reachsh/devnet-cfx:${REACH_VERSION}
     ports:
       - '12537:12537'
-  algorand-devnet:
-    image: reachsh/algorand-devnet:${REACH_VERSION}
+  devnet-algo:
+    image: reachsh/devnet-algo:${REACH_VERSION}
     depends_on:
-      - algorand-postgres-db
+      - devnet-algo-pg
     environment:
       - REACH_ALGO_DEBUG
-      - POSTGRES_HOST=algorand-postgres-db
+      - POSTGRES_HOST=devnet-algo-pg
       - POSTGRES_USER=algogrand
       - POSTGRES_PASSWORD=indexer
       - POSTGRES_DB=pgdb
@@ -959,7 +953,7 @@ $DEPENDS_ON
       - '4180:4180'
       - '8980:8980'
       - '9392:9392'
-  algorand-postgres-db:
+  devnet-algo-pg:
     image: postgres:11-alpine
     environment:
       - POSTGRES_USER=algogrand
@@ -985,8 +979,6 @@ ensure_connector_mode_browser () {
   # * ALGO-browser
   # * CFX-browser
   # $WHAT-$WHERE
-
-  # TODO: distinguish between BLAH-browser-dockerized and browser-remote
 
   # Expand defaults
   REACH_CONNECTOR_MODE=${REACH_CONNECTOR_MODE:-ETH}
@@ -1065,13 +1057,13 @@ do_devnet () {
   cat<<EOF > docker-compose.yml.devnet
 version: '3.4'
 services:
-  algorand-devnet:
-    image: reachsh/algorand-devnet:latest
+  devnet-algo:
+    image: reachsh/devnet-algo:latest
     depends_on:
-      - algorand-postgres-db
+      - devnet-algo-pg
     environment:
       - REACH_ALGO_DEBUG
-      - POSTGRES_HOST=algorand-postgres-db
+      - POSTGRES_HOST=devnet-algo-pg
       - POSTGRES_USER=algogrand
       - POSTGRES_PASSWORD=indexer
       - POSTGRES_DB=pgdb
@@ -1079,14 +1071,14 @@ services:
       - '4180:4180'
       - '8980:8980'
       - '9392:9392'
-  algorand-postgres-db:
+  devnet-algo-pg:
     image: postgres:11-alpine
     environment:
       - POSTGRES_USER=algogrand
       - POSTGRES_PASSWORD=indexer
       - POSTGRES_DB=pgdb
 EOF
-    DEVNET_NAME=algorand-devnet
+    DEVNET_NAME=devnet-algo
     ;;
 
     CFX*)
@@ -1104,12 +1096,12 @@ EOF
   cat<<EOF > docker-compose.yml.devnet
 version: '3.4'
 services:
-  ethereum-devnet:
-    image: reachsh/ethereum-devnet:latest
+  devnet-eth:
+    image: reachsh/devnet-eth:latest
     ports:
       - '8545:8545'
 EOF
-    DEVNET_NAME=ethereum-devnet
+    DEVNET_NAME=devnet-eth
     ;;
 
   esac
@@ -1141,28 +1133,28 @@ rpc_server_compose () {
       if $USE_EXISTING_DEVNET ; then
         echo 'using existing devnet'
         DEPENDS_ON='
-      - ETH_NODE_URI=http://ethereum-devnet:8545
+      - ETH_NODE_URI=http://devnet-eth:8545
 '
       else
         # XXX CFX
         if $IS_ALGO ; then
           DEPENDS_ON='
-      - ALGO_SERVER=http://algorand-devnet
+      - ALGO_SERVER=http://devnet-algo
       - ALGO_PORT=4180
-      - ALGO_INDEXER_SERVER=http://algorand-devnet
+      - ALGO_INDEXER_SERVER=http://devnet-algo
       - ALGO_INDEXER_PORT=8980
-    # Does not technically depend on algorand-devnet.
+    # Does not technically depend on devnet-algo.
     # This is just to get it to run both.
     depends_on:
-      - algorand-devnet
+      - devnet-algo
 '
       else
         DEPENDS_ON='
-      - ETH_NODE_URI=http://ethereum-devnet:8545
-    # Does not technically depend on ethereum-devnet.
+      - ETH_NODE_URI=http://devnet-eth:8545
+    # Does not technically depend on devnet-eth.
     # This is just to get it to run both.
     depends_on:
-      - ethereum-devnet
+      - devnet-eth
 '
       fi
     fi
@@ -1192,16 +1184,16 @@ services:
       - REACH_RPC_TLS_CRT
       - REACH_RPC_TLS_PASSPHRASE
 $DEPENDS_ON
-  ethereum-devnet:
-    image: reachsh/ethereum-devnet:${REACH_VERSION}
+  devnet-eth:
+    image: reachsh/devnet-eth:${REACH_VERSION}
     ports:
       - '8545:8545'
-  algorand-devnet:
-    image: reachsh/algorand-devnet:latest
+  devnet-algo:
+    image: reachsh/devnet-algo:latest
     depends_on:
-      - algorand-postgres-db
+      - devnet-algo-pg
     environment:
-      - POSTGRES_HOST=algorand-postgres-db
+      - POSTGRES_HOST=devnet-algo-pg
       - POSTGRES_USER=algogrand
       - POSTGRES_PASSWORD=indexer
       - POSTGRES_DB=pgdb
@@ -1209,7 +1201,7 @@ $DEPENDS_ON
       - '4180:4180'
       - '8980:8980'
       - '9392:9392'
-  algorand-postgres-db:
+  devnet-algo-pg:
     image: postgres:11-alpine
     environment:
       - POSTGRES_USER=algogrand
@@ -1451,7 +1443,7 @@ do_docker_reset () {
   echo '...done'
 }
 
-REACH_IMAGES='reach ethereum-devnet algorand-devnet devnet-cfx runner react-runner rpc-server'
+REACH_IMAGES='reach devnet-eth devnet-algo devnet-cfx runner react-runner rpc-server'
 
 do_update() {
   for IMG in $REACH_IMAGES ; do
@@ -1476,7 +1468,7 @@ do_usage () {
   echo "  clean        --- delete compiled artifacts"
   echo "  init         --- set up source files for a simple app"
   echo "  run          --- run a simple app"
-  echo "  down         --- halt any dockerized devnets for this app"
+  echo "  down         --- halt any Dockerized devnets for this app"
   echo "  scaffold     --- set up Docker scaffolding for a simple app"
   echo "  react        --- run a simple react app"
   echo "  rpc-server   --- run a simple Reach RPC server"
