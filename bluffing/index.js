@@ -3,7 +3,7 @@ import AppViews from './views/AppViews';
 import DeployerViews from './views/DeployerViews';
 import AttacherViews from './views/AttacherViews';
 import {renderDOM, renderView} from './views/render';
-// import './index.css';
+import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 const reach = loadStdlib(process.env);
@@ -99,7 +99,7 @@ class Player extends React.Component {
       return [amount, face]
   };
 
-  setresolveAmountAndFace(amount, face){ this.state.resolveAmountAndFace(amount, face)}
+  // setresolveAmountAndFace(amount, face){ this.state.resolveAmountAndFace(amount, face)}
 
   seeOutcome(i) { this.setState({view: 'Done', outcome: intToOutcome[i]}); }
   informTimeout() { this.setState({view: 'Timeout'}); }

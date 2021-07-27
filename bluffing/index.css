@@ -1,0 +1,121 @@
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;  
+  }
+    
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  .App {
+    text-align: center;
+    background-color: lightblue;
+  }
+  
+  .App-header {
+    background-color: #ffffff;
+    background-image: url("bg.jpg");
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    background-color: #f1f1f1;
+  }
+  
+  .App-link {
+    color: #61dafb;
+    border: 10px solid #999;
+    border-radius: 4px;
+  }
+  
+  .Deployer{
+     
+  }
+  
+  .Rules{
+    background-color:rgb(236, 234, 234);
+    color: black;
+    width: 80%;
+    height: 60%;
+    border: 4px solid rgb(185, 15, 15);
+    border-radius: 4px;
+  
+  }
+  
+  .Game{
+    background-color: #ffffff;
+    border: 4px solid rgb(185, 15, 15);
+    color: black;
+   
+    padding: 30px;
+   
+    border-radius: 4px;
+  }
+  
+  
+  input[type=number] {
+    font-size: calc(10px + 2vmin);
+    width: 4em;
+  }
+  
+  button {
+    font-size: calc(10px + 2vmin);
+    background-color: gray;
+    color: black;
+    border-radius:4px;
+    border-color: black;
+    width: calc(15px +2vmin);
+  }
+  
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .Hit{
+    font-size: calc(10px + 2vmin);
+    background-color: rgb(17, 87, 17);
+    color : black;
+    border-radius: 4px;
+    border-color: rgb(17, 87, 17);
+    padding: 15px 32px;
+    width: calc(15px +2vmin);
+  }
+  
+  .Stand{
+    font-size: calc(10px + 2vmin);
+    background-color:rgb(185, 15, 15);
+    color : black;
+    border-radius: 4px;
+    border-color: rgb(185, 15, 15);
+    padding: 15px 32px;
+    width: calc(15px +2vmin);
+  }
+  textarea {
+    font-size: calc(10px + 2vmin);
+  }
+  
+   
+  
+  .ContractInfo {
+    font-size: calc(10px + 1vmin);
+    text-align: left;
+    width: 90vw;
+    height: 7em;
+    padding: 2vw;
+    overflow-x: scroll;
+    white-space: pre;
+  }
+  
+  ul {
+    text-align: left;
+    list-style-position: inside;
+  }
