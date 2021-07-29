@@ -12,10 +12,21 @@ const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
 const {standardUnit} = reach;
 const defaults = {defaultFundAmt: '10', defaultWager: '3', standardUnit};
 
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {view: 'ConnectAccount', ...defaults};
+    fetch('http://localhost:5000/get_data/1', {
+      method: 'get',
+      headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+      }
+  }).then(res => res.json())
+  .then(data => console.log(data))
+
   }
   async componentDidMount() {
     const acc = await reach.getDefaultAccount();
