@@ -39,13 +39,14 @@ exports.SetWager = class extends React.Component {
 
 exports.Deploy = class extends React.Component {
   render() {
-    const {parent, wager, standardUnit} = this.props;
+    const {parent, wager, standardUnit, type} = this.props;
+    console.log(type)
     return (
       <div>
         Wager (pay to deploy): <strong>{wager}</strong> {standardUnit}
         <br />
         <button
-          onClick={() => parent.deploy()}
+          onClick={() => parent.deploy(type)}
         >Deploy</button>
       </div>
     );

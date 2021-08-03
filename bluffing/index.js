@@ -10,7 +10,7 @@ const reach = loadStdlib(process.env);
 const handToInt = {'ROCK': 0, 'PAPER': 1, 'SCISSORS': 2};
 const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
 const {standardUnit} = reach;
-const defaults = {defaultFundAmt: '10', defaultWager: '3', standardUnit};
+const defaults = {defaultFundAmt: '10', defaultWager: '0.01', standardUnit};
 
 
 
@@ -18,15 +18,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {view: 'ConnectAccount', ...defaults};
-    fetch('http://localhost:5000/get_data/1', {
-      method: 'get',
-      headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json"
-      }
-  }).then(res => res.json())
-  .then(data => console.log(data))
-
+    
   }
   async componentDidMount() {
     const acc = await reach.getDefaultAccount();
@@ -37,16 +29,47 @@ class App extends React.Component {
       const faucet = await reach.getFaucet();
       this.setState({view: 'FundAccount', faucet});
     } catch (e) {
+      await this.fetchAllData()
+      console.log(this.state)
       this.setState({view: 'DeployerOrAttacher'});
     }
+
   }
+
+  async fetchAllData() {
+    fetch('http://localhost:5000/get_public_data', {
+      method: 'get',
+      headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+      }
+    }).then(res => {
+      if (res.ok){
+        console.log('ok')
+        return res.json();
+      }else{
+        alert('fail')
+        return res.json()
+      }
+    })
+    .then(data => {
+      console.log(data)
+      console.log(data.alldata)
+      this.setState({data : data.alldata})
+    })
+  }
+
   async fundAccount(fundAmount) {
     await reach.transfer(this.state.faucet, this.state.acc, reach.parseCurrency(fundAmount));
     this.setState({view: 'DeployerOrAttacher'});
   }
   async skipFundAccount() { this.setState({view: 'DeployerOrAttacher'}); }
-  selectAttacher() { this.setState({view: 'Wrapper', ContentView: Attacher}); }
-  selectDeployer() { this.setState({view: 'Wrapper', ContentView: Deployer}); }
+  
+  selectAttacher(num) { 
+    console.log(num)
+    this.setState({view: 'Wrapper', ContentView: Attacher, ctcInfoStr: num});
+   }
+  selectDeployer(type) { this.setState({view: 'Wrapper', ContentView: Deployer, type: type}); }
   render() { return renderView(this, AppViews); }
 }
 
@@ -122,13 +145,29 @@ class Deployer extends Player {
     this.state = {view: 'SetWager'};
   }
   setWager(wager) { this.setState({view: 'Deploy', wager}); }
-  async deploy() {
+  async deploy(type) {
     const ctc = this.props.acc.deploy(backend);
     this.setState({view: 'Deploying', ctc});
     this.wager = reach.parseCurrency(this.state.wager); // UInt
     backend.Alice(ctc, this);
     const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
-    this.setState({view: 'WaitingForAttacher', ctcInfoStr});
+    console.log(this.state)
+    fetch('http://localhost:5000/add_data', {
+      method: 'post',
+      body: JSON.stringify({
+          contract: ctcInfoStr,
+          type: type,
+          wager: this.wager
+      }),
+      headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+      }
+    }).then(res => res.json())
+    .then(data => {
+      console.log(data.id)
+      this.setState({view: 'WaitingForAttacher', ctcInfoStr: data.id})
+    })
   }
   render() { return renderView(this, DeployerViews); }
 }
@@ -136,12 +175,42 @@ class Deployer extends Player {
 class Attacher extends Player {
   constructor(props) {
     super(props);
-    this.state = {view: 'Attach'};
+    var room_num = this.props.ctcInfoStr
+    console.log('roomnum: ', room_num)
+    console.log(room_num)
+    if (room_num === -1){
+      this.state = {view: 'Attach'};
+    }else{
+      this.state = {view: 'Attaching'}
+      this.attach(room_num.toString())
+    }
+    
   }
   attach(ctcInfoStr) {
-    const ctc = this.props.acc.attach(backend, JSON.parse(ctcInfoStr));
-    this.setState({view: 'Attaching'});
-    backend.Bob(ctc, this);
+    fetch('http://localhost:5000/get_data/' + ctcInfoStr, {
+      method: 'get',
+      headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+      }
+    }).then(res => {
+      if (res.ok){
+        console.log('ok')
+        return res.json();
+      }else{
+        alert('fail')
+        return res.json()
+      }
+    })
+    .then(data => {
+      console.log(data)
+      console.log(data.contract)
+      console.log(data.data)
+      console.log(data.data.contract)
+      const ctc = this.props.acc.attach(backend, JSON.parse(data.data.contract));
+      this.setState({view: 'Attaching'});
+      backend.Bob(ctc, this);
+    })
   }
   async acceptWager(wagerAtomic) { // Fun([UInt], Null)
     const wager = reach.formatCurrency(wagerAtomic, 4);

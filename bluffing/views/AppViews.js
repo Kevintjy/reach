@@ -8,7 +8,7 @@ exports.Wrapper = class extends React.Component {
     return (
       <div className="App">
         <header className="App-header" id="root">
-          <h1>Rock, Paper, Scissors</h1>
+          <h1>Liar's dice</h1>
           {content}
         </header>
       </div>
@@ -54,13 +54,25 @@ exports.FundAccount = class extends React.Component {
 }
 
 exports.DeployerOrAttacher = class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+}
   render() {
-    const {parent} = this.props;
+    var {parent, data} = this.props;
+    if(!data){
+      data = []
+    }
+    console.log(data)
     return (
       <div>
-        Please select a role:
-        <br />
-        <p>
+        Please select a public room:
+        <br/>
+        {data.map((item) => {
+          return <button onClick={() => parent.selectAttacher(item.id)}
+          >{item.id} {item.wager}</button>
+        })}
+        {/* <p>
           <button
             onClick={() => parent.selectDeployer()}
           >Deployer</button>
@@ -68,10 +80,17 @@ exports.DeployerOrAttacher = class extends React.Component {
         </p>
         <p>
           <button
-            onClick={() => parent.selectAttacher()}
+            onClick={() => parent.selectAttacher(3304)}
           >Attacher</button>
           <br /> Attach to the Deployer's contract.
-        </p>
+        </p> */}
+        <br></br>
+        <button onClick={()=> parent.selectDeployer('public')}>create public room</button>
+        <br></br>
+        <button onClick={()=> parent.selectDeployer('private')}>create private room</button>
+        <br></br>
+        <input type="number" onChange={(e) => this.setState({room: e.target.value})}></input>
+        <button onClick={()=> parent.selectAttacher(this.state.room)}>join</button>
       </div>
     );
   }
