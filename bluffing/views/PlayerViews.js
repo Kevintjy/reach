@@ -1,15 +1,34 @@
 import React from 'react';
+import a from '../dices/f1.png';
+import b from '../dices/f2.png';
+import c from '../dices/f3.png';
+import d from '../dices/f4.png';
+import e from '../dices/f5.png';
+import f from '../dices/f6.png';
+
 
 const exports = {};
+const MAPDICE = {1: a, 2: b, 3: c, 4: d, 5: e, 6: f};
 
 // Player views must be extended.
 // It does not have its own Wrapper view.
+exports.allDices = class extends React.Component {
+  render(){
+    return <div>all dices ha!</div>
+  }
+}
+
 
 exports.ifChallenge = class extends React.Component {
   render() {
     const {parent, playable, currAmount, currFace} = this.props;
+    console.log(parent.state.ifDice)
+    console.log(parent.state.dice)
     return (
       <div>
+        {parent.state.dice.map((item) => {
+          return <img src={MAPDICE[item]}></img>
+        })}
         {!playable ? 'Please wait...' : ''}
         <br />
         current amount = {currAmount}
@@ -35,13 +54,19 @@ exports.keepBidding = class extends React.Component {
     }
     render() {
       const {parent, playable, currAmount, currFace} = this.props;
+      console.log(parent)
       return (
         <div>
+          {parent.state.dice.map((item) => {
+            
+          return <img src={MAPDICE[item]}></img>
+        })}
           {!playable ? 'Please wait...' : ''}
           <br />
           current amount = {currAmount}
           <br />
           current face = {currFace}
+          <br/>
           amount
           <input
             type="number"
@@ -69,8 +94,13 @@ exports.keepBidding = class extends React.Component {
 
 exports.WaitingForResults = class extends React.Component {
   render() {
+    const {parent} = this.props
+    console.log(parent)
     return (
       <div>
+        {parent.state.dice.map((item) => {
+          return <img src={MAPDICE[item]}></img>
+        })}
         Waiting for results...
       </div>
     );

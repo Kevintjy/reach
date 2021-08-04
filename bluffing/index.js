@@ -83,7 +83,7 @@ class Player extends React.Component {
     const num4 = Math.ceil(Math.random() * 6);
     const num5 = Math.ceil(Math.random() * 6);
     const res = [num1, num2, num3, num4, num5];
-    this.setState({dice: res})
+    this.setState({dice: res, ifDice: true})
     console.log(res)
     return res;
   }
