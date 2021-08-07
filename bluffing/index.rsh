@@ -22,7 +22,7 @@ const Player =
         ifChallenge: Fun([UInt, UInt], UInt),
         ifWinner: Fun([Array(UInt, 5), Array(UInt, 5), UInt, UInt, UInt], Bool),
         keepBidding: Fun([UInt, UInt], Array(UInt, 2)),
-        seeOutcome: Fun([UInt], Null),
+        seeOutcome: Fun([UInt, Array(UInt, 5), Array(UInt, 5)], Null),
         informTimeout: Fun([], Null),
       };
 const Alice =
@@ -143,6 +143,6 @@ export const main =
       commit();
 
       each([A, B], () => {
-        interact.seeOutcome(outcome); });
+        interact.seeOutcome(outcome, diceA, diceB); });
       exit(); 
   });

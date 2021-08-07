@@ -135,7 +135,24 @@ class Player extends React.Component {
 
   // setresolveAmountAndFace(amount, face){ this.state.resolveAmountAndFace(amount, face)}
 
-  seeOutcome(i) { this.setState({view: 'Done', outcome: intToOutcome[i]}); }
+  seeOutcome(i, diceA, diceB) { 
+    console.log(diceA, diceB)
+
+    var DICEA = []
+    for (let j in diceA){
+      console.log(diceA[j])
+      DICEA.push(parseInt(diceA[j]._hex))
+    }
+    var DICEB = []
+    for(let j in diceB){
+      DICEB.push(parseInt(diceB[j]._hex))
+    }
+    this.setState({view: 'Done',
+                  outcome: intToOutcome[i],
+                  DICEA: DICEA,
+                  DICEB: DICEB
+                  });
+  }
   informTimeout() { this.setState({view: 'Timeout'}); }
 }
 

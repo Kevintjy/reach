@@ -109,9 +109,18 @@ exports.WaitingForResults = class extends React.Component {
 
 exports.Done = class extends React.Component {
   render() {
-    const {outcome} = this.props;
+    const {outcome, parent} = this.props;
+    console.log(parent)
     return (
       <div>
+        <br/>{parent.state.DICEA.map((item) => {
+            
+            return <img src={MAPDICE[item]}></img>
+          })}
+        <br/>{parent.state.DICEB.map((item) => {
+            
+            return <img src={MAPDICE[item]}></img>
+          })}
         Thank you for playing. The outcome of this game was:
         <br />{outcome || 'Unknown'}
       </div>
