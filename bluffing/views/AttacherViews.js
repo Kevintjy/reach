@@ -1,7 +1,14 @@
 import React from 'react';
+import a from '../dices/f1.png';
+import b from '../dices/f2.png';
+import c from '../dices/f3.png';
+import d from '../dices/f4.png';
+import e from '../dices/f5.png';
+import f from '../dices/f6.png';
 import PlayerViews from './PlayerViews';
 
 const exports = {...PlayerViews};
+const MAPDICE = {1: a, 2: b, 3: c, 4: d, 5: e, 6: f};
 
 exports.Wrapper = class extends React.Component {
   render() {
@@ -74,7 +81,7 @@ exports.WaitingForTurn = class extends React.Component {
     const {parent} = this.props;
     return (
       <div>
-        {parent.state.dice}
+          {parent.state.dice}
         Waiting for the other player...
         <br />Think about which move you want to play.
       </div>

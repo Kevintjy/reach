@@ -7,6 +7,7 @@ import e from '../dices/f5.png';
 import f from '../dices/f6.png';
 
 
+
 const exports = {};
 const MAPDICE = {1: a, 2: b, 3: c, 4: d, 5: e, 6: f};
 
@@ -83,9 +84,13 @@ exports.keepBidding = class extends React.Component {
           onClick={() => {
             console.log('button click', this.state)
             console.log(parent)
-            parent.state.resolveAmountAndFace(
+            if(this.state.face < currFace || this.state.amount < currAmount 
+              || (this.state.face == currFace && this.state.amount == currAmount)){
+                alert("invalid bid")
+              }
+            else{parent.state.resolveAmountAndFace(
               this.state.amount.toString() + ',' + this.state.face.toString()) 
-          }}
+          }}}
         >submit</button>
         </div>
       );
