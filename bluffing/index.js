@@ -26,6 +26,7 @@ class App extends React.Component {
     const bal = reach.formatCurrency(balAtomic, 4);
     this.setState({acc, bal});
     try {
+      await this.fetchAllData()
       const faucet = await reach.getFaucet();
       this.setState({view: 'FundAccount', faucet});
     } catch (e) {
