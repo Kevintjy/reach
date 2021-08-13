@@ -79,11 +79,16 @@ exports.AcceptTerms = class extends React.Component {
 exports.WaitingForTurn = class extends React.Component {
   render() {
     const {parent} = this.props;
+    console.log(parent)
     return (
       <div>
-          {parent.state.dice}
+        {parent.state.dice && parent.state.dice.map((item) => {
+          return <img src={MAPDICE[item]}></img>
+        })}
+        <br></br>
         Waiting for the other player...
-        <br />Think about which move you want to play.
+        <br></br>
+        Think about which move you want to play.
       </div>
     );
   }

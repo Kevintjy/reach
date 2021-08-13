@@ -35,7 +35,8 @@ exports.ifChallenge = class extends React.Component {
         current amount = {currAmount}
         <br />
         current face = {currFace}
-        <button
+        <br></br>
+        Open? Liar! <button
           disabled={!playable}
           onClick={() => parent.setChanllenge(1)}
         >yes</button>
@@ -79,6 +80,7 @@ exports.keepBidding = class extends React.Component {
             disabled={!playable}
             onChange={(e) => this.setState({face: e.target.value})}
           />
+          <br></br>
             <button
           disabled={!playable}
           onClick={() => {
@@ -106,6 +108,7 @@ exports.WaitingForResults = class extends React.Component {
         {parent.state.dice.map((item) => {
           return <img src={MAPDICE[item]}></img>
         })}
+        <br></br>
         Waiting for results...
       </div>
     );
@@ -118,14 +121,15 @@ exports.Done = class extends React.Component {
     console.log(parent)
     return (
       <div>
-        <br/>{parent.state.DICEA.map((item) => {
+        <br/>Alice: {parent.state.DICEA.map((item) => {
             
             return <img src={MAPDICE[item]}></img>
           })}
-        <br/>{parent.state.DICEB.map((item) => {
+        <br/>Bob: {parent.state.DICEB.map((item) => {
             
             return <img src={MAPDICE[item]}></img>
           })}
+        <br></br>
         Thank you for playing. The outcome of this game was:
         <br />{outcome || 'Unknown'}
       </div>
