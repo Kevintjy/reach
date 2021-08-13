@@ -12,17 +12,13 @@ body {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
   }
-  .App {
-    text-align: center;
-    background-color: lightblue;
-  }
-  
+
   .App-header {
-    background-color: #ffffff;
     background-image: url("bg.jpg");
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    text-align: center;
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
@@ -65,6 +61,12 @@ body {
     font-size: calc(10px + 2vmin);
     width: 4em;
   }
+
+
+  .GameRules {
+    background-color: blue;
+    color:white
+  }
   
   button {
     font-size: calc(10px + 2vmin);
@@ -73,13 +75,35 @@ body {
     border-radius:4px;
     border-color: black;
     width: calc(15px +2vmin);
+    cursor: pointer;
+  }
+
+  .rooms{
+    /* margin: 0%; */
+    /* margin-left: 0px; */
+    text-align: left;
+    color: bisque;
   }
   
   button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
-  
+
+  .col-1{
+    flex:1;
+  }
+
+  .block{
+    background-color: gray;
+    padding: 1rem;
+    margin: 5%;
+    border-radius: 0.5rem;
+    width: 30%;
+    height: 80%;
+  }
+
+
   .Hit{
     font-size: calc(10px + 2vmin);
     background-color: rgb(17, 87, 17);
@@ -118,4 +142,9 @@ body {
   ul {
     text-align: left;
     list-style-position: inside;
+  }
+
+  .GameRules {
+    background-color: blue;
+    color:white
   }

@@ -1,19 +1,5 @@
 'reach 0.1';
-
-const [ isHand, ROCK, PAPER, SCISSORS, GUESS ] = makeEnum(4);
 const [ isOutcome, B_WINS, DRAW, A_WINS ] = makeEnum(3);
-
-const winnerA = (faceA, faceB, guess) =>
-  (faceA+faceB < guess) ? 2 : 0
-
-const getWinnerA = (ifBluffing) =>
-  (ifBluffing)? 2 : 0
-
-const getWinnerB = (ifBluffing) =>
-  (ifBluffing)? 0 : 2
-
-const winnerB = (faceA, faceB, guess) =>
-  (faceA+faceB < guess) ? 0 : 2
 
 const Player =
       { ...hasRandom,
@@ -133,8 +119,6 @@ export const main =
                 [turn, aB, fB] = [1, amountB, faceB];
                 continue
               }
-
-            // commit();
             }
         }
       }

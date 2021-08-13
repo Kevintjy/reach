@@ -104,18 +104,44 @@ class Player extends React.Component {
 
   async ifWinner(diceA, diceB, a, f, person){
     var count = 0;
+    var countf = 0;
     f = parseInt(f._hex)
     for (let i=0; i<6; i++){
-      if (diceA[i] == 1 || diceA[i] == f){
-        count += 1;
+      if(diceA[i] == 1 || diceA[i] == f){
+        count += 1
       }
-      console.log(diceA[i], f, count, diceA[i] == f)
-      if (diceB[i] == 1 || diceB[i] == f){
-        count += 1;
+      if (diceA[i] == f){
+        countf += 1
       }
-      console.log(diceB[i],f,  count, diceA[i] == f)
     }
-    return a>count;
+    var countA = count;
+    if (count == 5){
+      countA = 6
+    }
+    if (countf == 5 || count - countf == 5){
+      countA = 7
+    }
+    console.log("there are", count, f)
+    count = 0
+    countf = 0
+    for (let i=0; i<6; i++){
+      if(diceB[i] == 1 || diceB[i] == f){
+        count += 1
+      }
+      if (diceB[i] == f){
+        countf += 1
+      }
+    }
+    var countB = count;
+    if (count == 5){
+      countB = 6
+    }
+    if (countf == 5 || count - countf == 5){
+      countB = 7
+    }
+    console.log("there are", count, f)
+    console.log("there actually are", countA+countB, f)
+    return a>countA + countB;
   }
 
   async keepBidding(currAmount, currFace){
@@ -153,7 +179,24 @@ class Player extends React.Component {
                   DICEB: DICEB
                   });
   }
-  informTimeout() { this.setState({view: 'Timeout'}); }
+  informTimeout() { 
+    this.setState({view: 'Timeout'});
+    fetch('http://localhost:5000/get_data/' + this.state.ctcInfoStr, {
+      method: 'get',
+      headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+      }
+    }).then(res => {
+      if (res.ok){
+        console.log('ok')
+        return res.json();
+      }else{
+        alert('fail')
+        return res.json()
+      }
+    })
+   }
 }
 
 class Deployer extends Player {
@@ -204,6 +247,7 @@ class Attacher extends Player {
     
   }
   attach(ctcInfoStr) {
+    console.log('attach ' + ctcInfoStr)
     fetch('http://localhost:5000/get_data/' + ctcInfoStr, {
       method: 'get',
       headers: {
@@ -221,12 +265,10 @@ class Attacher extends Player {
     })
     .then(data => {
       console.log(data)
-      console.log(data.contract)
-      console.log(data.data)
-      console.log(data.data.contract)
       const ctc = this.props.acc.attach(backend, JSON.parse(data.data.contract));
       this.setState({view: 'Attaching'});
       backend.Bob(ctc, this);
+      console.log(this.props)
     })
   }
   async acceptWager(wagerAtomic) { // Fun([UInt], Null)
