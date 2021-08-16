@@ -18,9 +18,9 @@ If #valueOne is not called, then it can be represented as any number (you mean v
 handA = {1, 1, 2, 3, 4}
 handB = {1, 2, 3, 4, 4}
 
-A bluff there are at least 3个2, B opens, A wins (there are 2个2， 3个1，一共5个2)
-A bluff there are at least 5个2, B opens, A wins (there are 2个2， 3个1，一共5个2)
-A bluff there are at least 6个2, B opens, B wins (there are 2个2， 3个1，一共5个2)
+A bluff there are at least 3 2s, B opens, A wins (there are 2 2s， 3 1s, 5 2s in total)
+A bluff there are at least 5 2s, B opens, A wins (there are 2 2s， 3 1s, 5 2s in total)
+A bluff there are at least 6 2s, B opens, B wins (there are 2 2s， 3 1s, 5 2s in total)
 
 ### 2
 
@@ -34,13 +34,13 @@ A bluff there are 2 1, B bluff 3 2, A open, A win (2 2 totally)
 
 ### 3
 
-if one players get only value 1 and one of (2, 3,4,5,6), lile 1个1, 4个2, it is consider as 6个2
+if one players get only value 1 and one of (2, 3,4,5,6), lile 1 1s, 4 2s, it is consider as 6 2s
 
 #### example three
 handA = {1, 1, 2, 2, 2}
 handB = {1, 2, 3, 4, 4}
 
-there are 6 + 2个 2 in the game
+there are (6 + 2) 2s in the game
 
 
 ### 4
@@ -51,7 +51,7 @@ if one players get all same value, then it can be considered as 7 that value's d
 handA = {2, 2, 2, 2, 2}
 handB = {1, 2, 3, 4, 4}
 
-there are 7 + 2个 2 in the game
+there are (7 + 2) 2s in the game
 
 ## Step (two players)
     -A deploys game, set wager
