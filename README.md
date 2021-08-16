@@ -34,7 +34,7 @@ A bluff there are 2 1, B bluff 3 2, A open, A win (2 2 totally)
 
 ### 3
 
-if one players get only value 1 and one of (2, 3,4,5,6), lile 1 1s, 4 2s, it is consider as 6 2s
+if one players get only value 1 and one of (2, 3,4,5,6), lile 1 1s and 4 2s in their set, it is consider as 6 2s
 
 #### example three
 handA = {1, 1, 2, 2, 2}
