@@ -78,8 +78,11 @@ there are (7 + 2) 2s in the game
 
 `./reach react`
 
-## ISSUE
+## Challenges
+The syntax of Reach is defininetly new for both of us, and it takes some time to fully digest what each "commit" does. 
+The usage of docker and the operations behind it also causes some confusions. 
 
 ## what can be improved 
+Even though this is a popular drinking game in China, the rules for different reigions are slightly different. Sometimes 1s are not wild when they are called as a particular face (like two 1s). We wish to add a feature where people can select if they want to add this as their game rules before they start the game. We also like to expand this as a multiplayer game with more than one attachers. 
 
 
