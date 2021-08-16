@@ -13,7 +13,7 @@ When a bid is challenged, every player reveals their dice and check if the curre
 ## Rule
 
 ### 1
-If #valueOne is not called, then it can be represented as any number (you mean valueOne is wild???)
+Face 1 is wild
 #### example one
 handA = {1, 1, 2, 3, 4}
 handB = {1, 2, 3, 4, 4}
