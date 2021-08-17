@@ -9,7 +9,7 @@ Our bluffing game is a simple dice game that often use to bet/drinking beer in t
 
 When a bid is challenged, every player reveals their dice and check if the current bid is matched or not. If the bid is neither matched nor exceeded, the challenger wins(caught this bidder bluffing). Otherwise, the bidder wins. 
 
-Here's a demo video: [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+[See Video Demo Here](https://www.google.com "Demo Video")
 
 ## Rule
 
