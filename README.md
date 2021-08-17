@@ -83,7 +83,14 @@ there are (7 + 2) 2s in the game
 The syntax of Reach is defininetly new for both of us, and it takes some time to fully digest what each "commit" does. 
 The usage of docker and the operations behind it also causes some confusions. For example, when we run command `./reach react`, we didn't know the operations  running in the back. All the tutorials did an awesome job of introducing the language Reach, but it would be really helpful if they explain some concepts like that :) 
 
-## what can be improved 
+## What can be Improved 
 Even though this is a popular drinking game in China, the rules for different reigions are slightly different. Sometimes 1s are not wild when they are called as a particular face (like two 1s). We wish to add a feature where people can select if they want to add this as their game rules before they start the game. We also like to expand this as a multiplayer game with more than one attachers. 
 
+## references 
+Video demonstration cover page:
+Yuumi(background): https://na.leagueoflegends.com/en-us/champions/yuumi/
+YOU AND ME!(icon): https://na.leagueoflegends.com/en-us/champions/yuumi/
+Infinity edge (icon): https://leagueoflegends.fandom.com/wiki/Infinity_Edge_(Wild_Rift)
+Dice 6 (icon) && dices in game: https://commons.wikimedia.org/wiki/Category:Dice_faces
+GameCenter Background: https://stock.adobe.com/search?k=casino+table+background&asset_id=325384191
 
