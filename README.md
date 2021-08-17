@@ -1,9 +1,9 @@
 ## Reach Modified Bluffing Game
 
-Our bluffing game is a simple dice game that often use to bet/drinking beer in the party. It can be two players game or multiple players game(we will develop two players game first). Each player has 5 dice, when game begins, player rolls the dice simutaneously, keep them hidden from other players, and make a bid consisting of #AmountA #FaceA. The amount represents the player's guess as to how many of each face have been rolled by all of the players at the table, including themselves. Once he/she makes his/her guess, the other player(s) have several options: 
+Our bluffing game is a simple dice game that often use to bet/drinking beer in the party. It can be two players game or multiple players game(we will develop two players game first). Each player has 5 dice, when game begins, player rolls the dice simutaneously, keep them hidden from other players, and make a bid consisting of #Amount #Face. The amount represents the player's guess as to how many of each face have been rolled by all of the players at the table, including themselves. Once he/she makes his/her guess, the other player(s) have several options: 
 
-1. bid of a larger amount of #FaceA 
-2. bid the same amount of #AmountA, but a higher face value. 
+1. bid of a larger amount of #Face 
+2. bid the same amount of #Amount, but a higher face value. 
 3. both 1 and 2
 4. challenge the current bid
 
