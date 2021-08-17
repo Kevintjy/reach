@@ -87,10 +87,10 @@ The usage of docker and the operations behind it also causes some confusions. Fo
 Even though this is a popular drinking game in China, the rules for different reigions are slightly different. Sometimes 1s are not wild when they are called as a particular face (like two 1s). We wish to add a feature where people can select if they want to add this as their game rules before they start the game. We also like to expand this as a multiplayer game with more than one attachers. 
 
 ## references 
-Video demonstration cover page:
-Yuumi(background): https://na.leagueoflegends.com/en-us/champions/yuumi/
-YOU AND ME!(icon): https://na.leagueoflegends.com/en-us/champions/yuumi/
-Infinity edge (icon): https://leagueoflegends.fandom.com/wiki/Infinity_Edge_(Wild_Rift)
-Dice 6 (icon) && dices in game: https://commons.wikimedia.org/wiki/Category:Dice_faces
-GameCenter Background: https://stock.adobe.com/search?k=casino+table+background&asset_id=325384191
+Video demonstration cover page:</br>
+Yuumi(background): https://na.leagueoflegends.com/en-us/champions/yuumi/ </br>
+YOU AND ME!(icon): https://na.leagueoflegends.com/en-us/champions/yuumi/</br>
+Infinity edge (icon): https://leagueoflegends.fandom.com/wiki/Infinity_Edge_(Wild_Rift)</br>
+Dice 6 (icon) && dices in game: https://commons.wikimedia.org/wiki/Category:Dice_faces</br>
+GameCenter Background: https://stock.adobe.com/search?k=casino+table+background&asset_id=325384191</br>
 
