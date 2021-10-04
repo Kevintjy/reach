@@ -11,16 +11,18 @@ const handToInt = {'ROCK': 0, 'PAPER': 1, 'SCISSORS': 2};
 const intToOutcome = ['Bob wins!', 'Draw!', 'Alice wins!'];
 const {standardUnit} = reach;
 const defaults = {defaultFundAmt: '10', defaultWager: '0.01', standardUnit};
+reach.setProviderByName('TestNet');
 
 
-
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {view: 'ConnectAccount', ...defaults};
     
   }
   async componentDidMount() {
+    const now = await reach.getNetworkTime();
+    reach.setQueryLowerBound(reach.sub(now, 2000));
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
@@ -212,6 +214,7 @@ class Deployer extends Player {
     this.wager = reach.parseCurrency(this.state.wager); // UInt
     backend.Alice(ctc, this);
     const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
+    console.log('ctcInfoStr ', ctcInfoStr)
     console.log(this.state)
     fetch('http://localhost:5000/add_data', {
       method: 'post',
@@ -265,8 +268,9 @@ class Attacher extends Player {
       }
     })
     .then(data => {
+      data = data.data.contract
       console.log(data)
-      const ctc = this.props.acc.attach(backend, JSON.parse(data.data.contract));
+      const ctc = this.props.acc.attach(backend, JSON.parse(data));
       this.setState({view: 'Attaching'});
       backend.Bob(ctc, this);
       console.log(this.props)
