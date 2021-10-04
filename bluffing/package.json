@@ -4,7 +4,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@reach-sh/stdlib": "^0.1.3-rc.2"
+    "@reach-sh/stdlib": "^0.1.5-rc.0"
   },
   "author": "reach.sh",
   "license": "Apache-2.0",
