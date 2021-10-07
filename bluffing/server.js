@@ -55,7 +55,7 @@ app.post('/add_data', (req, res) => {
     res.status(200).send({id: id})
 })
 const port = process.env.PORT || 3000
-app.listen(port, () => {
+server.listen(port, () => {
  console.log(`Listening on port ${port}...`)
 });
 
