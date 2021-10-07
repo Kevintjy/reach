@@ -1,10 +1,19 @@
 const express = require('express')
+const https = require('https');
+const fs = require('fs');
 const app = express();
 const bodyParser = require('body-parser');
+var key = fs.readFileSync('selfsigned.key');
+var cert = fs.readFileSync('selfsigned.crt');
+var options = {
+  key: key,
+  cert: cert
+};
 app.use(bodyParser.json());
+var server = https.createServer(options, app);
 data = {}
 
-  app.all('*',function (req, res, next) {
+app.all('*',function (req, res, next) {
     res.header('Access-Control-Allow-Origin','http://localhost:3000'); //当允许携带cookies此处的白名单不能写’*’
     res.header('Access-Control-Allow-Headers','content-type,Content-Length, Authorization,Origin,Accept,X-Requested-With'); //允许的请求头
     res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT'); //允许的请求方法
@@ -45,7 +54,7 @@ app.post('/add_data', (req, res) => {
     console.log(data)
     res.status(200).send({id: id})
 })
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 3000
 app.listen(port, () => {
  console.log(`Listening on port ${port}...`)
 });
