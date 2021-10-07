@@ -45,7 +45,7 @@ app.post('/add_data', (req, res) => {
     console.log(data)
     res.status(200).send({id: id})
 })
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 443
 app.listen(port, () => {
  console.log(`Listening on port ${port}...`)
 });
